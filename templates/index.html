@@ -23,8 +23,8 @@
             <div class="col-md-4 offset-md-4 my-auto"> <!--Este div ocupará 4columnas del espacio (centrado)-->
                 <div class="card"> <!--Creacion del objeto card-->
                     <div class="card-header">
-                        <form action="">
-                            <div class="form-group">
+                        <form action="/crear-tarea" method="post">
+                            <div class="form-group"><!-- separa el input de las tareas-->
                                 <input type="text" name="contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">
@@ -33,6 +33,13 @@
                         </form>
                     </div>
                     <div class="card-body">
+                        <ul>
+                            {% for tarea in lista_de_tareas %}
+                            <li>
+                                {{tarea.contenido}}
+                            </li>
+                            {%endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>

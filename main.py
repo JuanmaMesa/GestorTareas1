@@ -4,11 +4,16 @@ from models import Tarea
 app = Flask(__name__)
 @app.route("/")
 def home():
-    return render_template("index.html")
+    todas_las_tareas = db.session.query(Tarea).all()
+    return render_template("index.html", lista_de_tareas=todas_las_tareas)
 
 @app.route("/crear-tarea", methods=["POST"])
 def crear():
     tarea = Tarea(contenido=request.form["contenido_tarea"], hecha=False)
+    db.session.add(tarea)
+    db.session.commit()
+    return redirect(url_for("home"))
+
 
 
 
