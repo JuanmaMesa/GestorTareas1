@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 import db
 from models import Tarea
 app = Flask(__name__)
@@ -12,11 +12,33 @@ def crear():
     tarea = Tarea(contenido=request.form["contenido_tarea"], hecha=False)
     db.session.add(tarea)
     db.session.commit()
+    db.session.close()
+    return redirect(url_for("home"))
+
+@app.route("/eliminar-tarea/<id>")
+def eliminar(id):
+    tarea = db.session.query(Tarea).filter_by(id=(id)).delete()
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for("home"))
+
+@app.route("/tarea-hecha/<id>")
+def hecha(id):
+    tarea = db.session.query(Tarea).filter_by(id=(id)).first()
+    tarea.hecha = not (tarea.hecha)
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for("home"))
+
+@app.route("/editar-tarea/<id>")
+def editar(id):
+    tarea = db.session.query(Tarea).filter_by(id=(id)).first()
+    tarea.hecha = not (tarea.hecha)
+    db.session.commit()
     return redirect(url_for("home"))
 
 
-
-
 if __name__ == "__main__":
+    # Esta linia arranca todo el sistema de mapeo
     db.Base.metadata.create_all(db.engine)
     app.run(debug=True)
